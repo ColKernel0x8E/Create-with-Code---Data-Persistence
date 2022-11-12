@@ -6,6 +6,7 @@ using UnityEngine.Events;
 
 public class Brick : MonoBehaviour
 {
+    ParticleSystem destroyParticle;
     public UnityEvent<int> onDestroyed;
     
     public int PointValue;
@@ -13,6 +14,7 @@ public class Brick : MonoBehaviour
     void Start()
     {
         var renderer = GetComponentInChildren<Renderer>();
+        destroyParticle = GetComponentInChildren<ParticleSystem>();
 
         MaterialPropertyBlock block = new MaterialPropertyBlock();
         switch (PointValue)
@@ -36,8 +38,9 @@ public class Brick : MonoBehaviour
     private void OnCollisionEnter(Collision other)
     {
         onDestroyed.Invoke(PointValue);
+        destroyParticle.Play();
         
         //slight delay to be sure the ball have time to bounce
-        Destroy(gameObject, 0.2f);
+        Destroy(gameObject, 0.12f);
     }
 }

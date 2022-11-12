@@ -249,6 +249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1c141baad4ddf14a98c290342342cf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Manager: {fileID: 450625942}
   Speed: 4
   MaxMovement: 2
 --- !u!1 &117386963
@@ -813,6 +814,7 @@ MonoBehaviour:
   HighScoreText: {fileID: 2078529056}
   GameOverText: {fileID: 474497238}
   NewHighScoreText: {fileID: 605317161}
+  gameOver: 0
 --- !u!1 &455529321
 GameObject:
   m_ObjectHideFlags: 0

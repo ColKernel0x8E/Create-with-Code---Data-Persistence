@@ -18,7 +18,9 @@ public class MainManager : MonoBehaviour
     
     private bool m_Started = false;
     private int m_Points;
+    private int m_bricks;
     
+    public bool gameOver = false;
     private bool m_GameOverMenu = false;
 
     
@@ -40,8 +42,13 @@ public class MainManager : MonoBehaviour
             }
         }
 
+        m_bricks = LineCount * perLine;
+
         if (ScoreManager.Instance != null )
         {
+            m_Points = ScoreManager.Instance.currentScore;
+            ScoreText.text = $"Score : {m_Points}";
+
             if (ScoreManager.Instance.highScore > 0)
             {
                 HighScoreText.text = $"Best Score : {ScoreManager.Instance.highScoreName} : {ScoreManager.Instance.highScore}";
@@ -75,21 +82,37 @@ public class MainManager : MonoBehaviour
                 SceneManager.LoadScene(0);
             }
         }
+        else if (m_bricks <= 0)
+        {
+            // All bricks destroyed, start new round
+            if (ScoreManager.Instance != null )
+            {
+                ScoreManager.Instance.currentScore = m_Points;
+            }
+            SceneManager.LoadScene(1);
+        }
     }
 
     void AddPoint(int point)
     {
         m_Points += point;
         ScoreText.text = $"Score : {m_Points}";
+        m_bricks--;
     }
 
     public void GameOver()
     {
+        gameOver = true;
         if (ScoreManager.Instance != null)
         {
             if (m_Points > ScoreManager.Instance.highScore)
             {
                 NewHighScoreText.SetActive(true);
+            }
+            else
+            {
+                m_GameOverMenu = true;
+                GameOverText.SetActive(true);
             }
         }
         else

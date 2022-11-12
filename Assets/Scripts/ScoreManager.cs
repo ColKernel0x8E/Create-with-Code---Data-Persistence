@@ -7,6 +7,7 @@ public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance;
 
+    public int currentScore;
     public int highScore;
     public string highScoreName;
 
