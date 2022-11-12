@@ -117,6 +117,7 @@ public class MainManager : MonoBehaviour
         {
             ScoreManager.Instance.highScore = m_Points;
             ScoreManager.Instance.highScoreName = highScoreName;
+            ScoreManager.Instance.SaveScore();
             HighScoreText.text = $"Best Score : {ScoreManager.Instance.highScoreName} : {ScoreManager.Instance.highScore}";
         }
 
