@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class MainManager : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class MainManager : MonoBehaviour
     private bool m_Started = false;
     private int m_Points;
     
-    private bool m_GameOver = false;
+    private bool m_GameOverMenu = false;
 
     
     // Start is called before the first frame update
@@ -39,7 +40,13 @@ public class MainManager : MonoBehaviour
             }
         }
 
-        HighScoreText.text = "Best Score : Name : 1";
+        if (ScoreManager.Instance != null )
+        {
+            if (ScoreManager.Instance.highScore > 0)
+            {
+                HighScoreText.text = $"Best Score : {ScoreManager.Instance.highScoreName} : {ScoreManager.Instance.highScore}";
+            }
+        }       
     }
 
     private void Update()
@@ -57,9 +64,13 @@ public class MainManager : MonoBehaviour
                 Ball.AddForce(forceDir * 2.0f, ForceMode.VelocityChange);
             }
         }
-        else if (m_GameOver)
+        else if (m_GameOverMenu)
         {
             if (Input.GetKeyDown(KeyCode.Space))
+            {
+                SceneManager.LoadScene(1);
+            }
+            else if (Input.GetKeyDown(KeyCode.Return))
             {
                 SceneManager.LoadScene(0);
             }
@@ -74,13 +85,43 @@ public class MainManager : MonoBehaviour
 
     public void GameOver()
     {
-        m_GameOver = true;
-        GameOverText.SetActive(true);
+        if (ScoreManager.Instance != null)
+        {
+            if (m_Points > ScoreManager.Instance.highScore)
+            {
+                NewHighScoreText.SetActive(true);
+            }
+        }
+        else
+        {
+            m_GameOverMenu = true;
+            GameOverText.SetActive(true);
+        }
     }
 
     public void SubmitHighScore()
     {
+        TMP_InputField nameField = NewHighScoreText.GetComponentInChildren< TMP_InputField>(true);
+        string highScoreName;
+
+        if (nameField != null)
+        {
+            highScoreName = nameField.text;
+        }
+        else
+        {
+            highScoreName = "";
+        }
+
+        if (ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.highScore = m_Points;
+            ScoreManager.Instance.highScoreName = highScoreName;
+            HighScoreText.text = $"Best Score : {ScoreManager.Instance.highScoreName} : {ScoreManager.Instance.highScore}";
+        }
+
         NewHighScoreText.SetActive(false);
+        m_GameOverMenu = true;
         GameOverText.SetActive(true);
     }
 }
